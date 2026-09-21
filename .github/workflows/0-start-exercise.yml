@@ -16,7 +16,7 @@ env:
 jobs:
   start_exercise:
     if: |
-      !github.event.repository.is_template
+      !github.event.repository.is_template && github.event.repository.has_issues
     name: Start Exercise
     uses: skills/exercise-toolkit/.github/workflows/start-exercise.yml@v0.8.1
     with:
