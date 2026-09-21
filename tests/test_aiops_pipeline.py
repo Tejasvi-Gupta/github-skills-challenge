@@ -1,4 +1,4 @@
-from pathlib import Path
+import runpy
 
 from src.anomaly_detector import AnomalyDetector
 from src.aiops_pipeline import load_data, run_pipeline
@@ -72,6 +72,16 @@ def test_pipeline_loads_data_and_consumes_detected_events():
     assert result["records_processed"] == len(data)
     assert len(result["anomalies_detected"]) == 2
     assert result["events_consumed"] == []
+
+
+def test_pipeline_script_prints_summary(capsys):
+    runpy.run_module("src.aiops_pipeline", run_name="__main__")
+
+    output = capsys.readouterr().out
+
+    assert "AIOps Pipeline Result" in output
+    assert "Records processed: 10" in output
+    assert "Anomalies detected: 2" in output
 
 
 def test_producer_publishes_event():
